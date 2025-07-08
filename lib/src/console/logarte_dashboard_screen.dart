@@ -44,67 +44,82 @@ class _LogarteDashboardScreenState extends State<LogarteDashboardScreen> {
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                SliverAppBar(
-                  floating: true,
-                  snap: true,
-                  leading: widget.showBackButton
-                      ? IconButton(
+                ValueListenableBuilder(
+                  valueListenable: widget.instance.logs,
+                  builder: (context, logs, child) {
+                    return SliverAppBar(
+                      floating: true,
+                      snap: true,
+                      leading: widget.showBackButton
+                          ? IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              icon:
+                                  const Icon(Icons.arrow_back_ios_new_rounded),
+                            )
+                          : null,
+                      automaticallyImplyLeading: false,
+                      actions: [
+                        IconButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            widget.instance.clearLogs();
                           },
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                        )
-                      : null,
-                  automaticallyImplyLeading: false,
-                  title: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      filled: true,
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: _controller.clear,
-                      ),
-                    ),
-                  ),
-                  bottom: TabBar(
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.center,
-                    labelPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    tabs: [
-                      Tab(
-                        icon: const Icon(Icons.list_alt_rounded),
-                        text: 'All (${widget.instance.logs.value.length})',
-                      ),
-                      Tab(
-                        icon: const Icon(Icons.bug_report_rounded),
-                        text:
-                            'Logging (${widget.instance.logs.value.whereType<PlainLogarteEntry>().length})',
-                      ),
-                      Tab(
-                        icon: const Icon(Icons.public),
-                        text:
-                            'Network (${widget.instance.logs.value.whereType<NetworkLogarteEntry>().length})',
-                      ),
-                      Tab(
-                        icon: const Icon(Icons.save_as_rounded),
-                        text:
-                            'Database (${widget.instance.logs.value.whereType<DatabaseLogarteEntry>().length})',
-                      ),
-                      Tab(
-                        icon: const Icon(Icons.navigation_rounded),
-                        text:
-                            'Navigation (${widget.instance.logs.value.whereType<NavigatorLogarteEntry>().length})',
-                      ),
-                      if (widget.instance.customTab != null)
-                        const Tab(
-                          icon: Icon(Icons.extension_rounded),
-                          text: 'Custom',
+                          icon: const Icon(Icons.delete_outline_rounded),
                         ),
-                    ],
-                  ),
+                      ],
+                      title: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          filled: true,
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: _controller.clear,
+                          ),
+                        ),
+                      ),
+                      bottom: TabBar(
+                        isScrollable: true,
+                        tabAlignment: TabAlignment.center,
+                        labelPadding:
+                            const EdgeInsets.symmetric(horizontal: 12.0),
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        tabs: [
+                          Tab(
+                            icon: const Icon(Icons.list_alt_rounded),
+                            text: 'All (${logs?.length ?? 0})',
+                          ),
+                          Tab(
+                            icon: const Icon(Icons.bug_report_rounded),
+                            text:
+                                'Logging (${logs?.whereType<PlainLogarteEntry>().length ?? 0})',
+                          ),
+                          Tab(
+                            icon: const Icon(Icons.public),
+                            text:
+                                'Network (${logs?.whereType<NetworkLogarteEntry>().length ?? 0})',
+                          ),
+                          Tab(
+                            icon: const Icon(Icons.save_as_rounded),
+                            text:
+                                'Database (${logs?.whereType<DatabaseLogarteEntry>().length ?? 0})',
+                          ),
+                          Tab(
+                            icon: const Icon(Icons.navigation_rounded),
+                            text:
+                                'Navigation (${logs?.whereType<NavigatorLogarteEntry>().length ?? 0})',
+                          ),
+                          if (widget.instance.customTab != null)
+                            const Tab(
+                              icon: Icon(Icons.extension_rounded),
+                              text: 'Custom',
+                            ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ];
             },

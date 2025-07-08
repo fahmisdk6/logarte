@@ -212,6 +212,10 @@ class Logarte {
     LogarteOverlay.detach();
   }
 
+  void clearLogs() {
+    logs.value = <LogarteEntry>[];
+  }
+
   Future<void> openConsole(BuildContext context) async {
     return Navigator.of(context).push<void>(
       MaterialPageRoute(
