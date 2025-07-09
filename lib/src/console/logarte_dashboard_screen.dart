@@ -47,6 +47,8 @@ class _LogarteDashboardScreenState extends State<LogarteDashboardScreen> {
                 ValueListenableBuilder(
                   valueListenable: widget.instance.logs,
                   builder: (context, logs, child) {
+                    final allLogs = logs as List<LogarteEntry>;
+
                     return SliverAppBar(
                       floating: true,
                       snap: true,
@@ -89,27 +91,27 @@ class _LogarteDashboardScreenState extends State<LogarteDashboardScreen> {
                         tabs: [
                           Tab(
                             icon: const Icon(Icons.list_alt_rounded),
-                            text: 'All (${logs?.length ?? 0})',
+                            text: 'All (${allLogs.length})',
                           ),
                           Tab(
                             icon: const Icon(Icons.bug_report_rounded),
                             text:
-                                'Logging (${logs?.whereType<PlainLogarteEntry>().length ?? 0})',
+                                'Logging (${allLogs.whereType<PlainLogarteEntry>().length})',
                           ),
                           Tab(
                             icon: const Icon(Icons.public),
                             text:
-                                'Network (${logs?.whereType<NetworkLogarteEntry>().length ?? 0})',
+                                'Network (${allLogs.whereType<NetworkLogarteEntry>().length})',
                           ),
                           Tab(
                             icon: const Icon(Icons.save_as_rounded),
                             text:
-                                'Database (${logs?.whereType<DatabaseLogarteEntry>().length ?? 0})',
+                                'Database (${allLogs.whereType<DatabaseLogarteEntry>().length})',
                           ),
                           Tab(
                             icon: const Icon(Icons.navigation_rounded),
                             text:
-                                'Navigation (${logs?.whereType<NavigatorLogarteEntry>().length ?? 0})',
+                                'Navigation (${allLogs.whereType<NavigatorLogarteEntry>().length})',
                           ),
                           if (widget.instance.customTab != null)
                             const Tab(
