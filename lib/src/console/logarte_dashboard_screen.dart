@@ -62,34 +62,17 @@ class _LogarteDashboardScreenState extends State<LogarteDashboardScreen> {
                             )
                           : null,
                       automaticallyImplyLeading: false,
-                      title: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _controller,
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                filled: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0,
-                                  vertical: 8.0,
-                                ),
-                                prefixIcon: const Icon(Icons.search),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.clear),
-                                  onPressed: _controller.clear,
-                                ),
-                              ),
-                            ),
+                      title: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          filled: true,
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: _controller.clear,
                           ),
-                          const SizedBox(width: 8.0),
-                          IconButton(
-                            onPressed: () {
-                              widget.instance.clearLogs();
-                            },
-                            icon: const Icon(Icons.delete_outline_rounded),
-                          ),
-                        ],
+                        ),
                       ),
                       bottom: TabBar(
                         isScrollable: true,
@@ -173,6 +156,12 @@ class _LogarteDashboardScreenState extends State<LogarteDashboardScreen> {
                 );
               },
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              widget.instance.clearLogs();
+            },
+            child: const Icon(Icons.delete_outline_rounded),
           ),
         ),
       ),
