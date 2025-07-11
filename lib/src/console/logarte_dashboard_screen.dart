@@ -40,88 +40,73 @@ class _LogarteDashboardScreenState extends State<LogarteDashboardScreen> {
     return LogarteThemeWrapper(
       child: DefaultTabController(
         length: widget.instance.customTab != null ? 6 : 5,
-        child: Scaffold(
-          body: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                ValueListenableBuilder(
-                  valueListenable: widget.instance.logs,
-                  builder: (context, logs, child) {
-                    final allLogs = logs as List<LogarteEntry>;
+        child: ValueListenableBuilder(
+            valueListenable: widget.instance.logs,
+            builder: (context, values, child) {
+              final allLogs = values as List<LogarteEntry>;
 
-                    return SliverAppBar(
-                      floating: true,
-                      snap: true,
-                      leading: widget.showBackButton
-                          ? IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              icon:
-                                  const Icon(Icons.arrow_back_ios_new_rounded),
-                            )
-                          : null,
-                      automaticallyImplyLeading: false,
-                      title: TextField(
-                        controller: _controller,
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          filled: true,
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: _controller.clear,
-                          ),
+              return Scaffold(
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  leading: widget.showBackButton
+                      ? IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                        )
+                      : null,
+                  title: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      filled: true,
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: _controller.clear,
+                      ),
+                    ),
+                  ),
+                  bottom: TabBar(
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.center,
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    tabs: [
+                      Tab(
+                        icon: const Icon(Icons.list_alt_rounded),
+                        text: 'All (${allLogs.length})',
+                      ),
+                      Tab(
+                        icon: const Icon(Icons.bug_report_rounded),
+                        text:
+                            'Logging (${allLogs.whereType<PlainLogarteEntry>().length})',
+                      ),
+                      Tab(
+                        icon: const Icon(Icons.public),
+                        text:
+                            'Network (${allLogs.whereType<NetworkLogarteEntry>().length})',
+                      ),
+                      Tab(
+                        icon: const Icon(Icons.save_as_rounded),
+                        text:
+                            'Database (${allLogs.whereType<DatabaseLogarteEntry>().length})',
+                      ),
+                      Tab(
+                        icon: const Icon(Icons.navigation_rounded),
+                        text:
+                            'Navigation (${allLogs.whereType<NavigatorLogarteEntry>().length})',
+                      ),
+                      if (widget.instance.customTab != null)
+                        const Tab(
+                          icon: Icon(Icons.extension_rounded),
+                          text: 'Custom',
                         ),
-                      ),
-                      bottom: TabBar(
-                        isScrollable: true,
-                        tabAlignment: TabAlignment.center,
-                        labelPadding:
-                            const EdgeInsets.symmetric(horizontal: 12.0),
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        tabs: [
-                          Tab(
-                            icon: const Icon(Icons.list_alt_rounded),
-                            text: 'All (${allLogs.length})',
-                          ),
-                          Tab(
-                            icon: const Icon(Icons.bug_report_rounded),
-                            text:
-                                'Logging (${allLogs.whereType<PlainLogarteEntry>().length})',
-                          ),
-                          Tab(
-                            icon: const Icon(Icons.public),
-                            text:
-                                'Network (${allLogs.whereType<NetworkLogarteEntry>().length})',
-                          ),
-                          Tab(
-                            icon: const Icon(Icons.save_as_rounded),
-                            text:
-                                'Database (${allLogs.whereType<DatabaseLogarteEntry>().length})',
-                          ),
-                          Tab(
-                            icon: const Icon(Icons.navigation_rounded),
-                            text:
-                                'Navigation (${allLogs.whereType<NavigatorLogarteEntry>().length})',
-                          ),
-                          if (widget.instance.customTab != null)
-                            const Tab(
-                              icon: Icon(Icons.extension_rounded),
-                              text: 'Custom',
-                            ),
-                        ],
-                      ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
-              ];
-            },
-            // To rebuild the list when the logs list gets modified
-            body: ValueListenableBuilder(
-              valueListenable: widget.instance.logs,
-              builder: (context, values, child) {
-                return AnimatedBuilder(
+                body: AnimatedBuilder(
                   animation: _controller,
                   builder: (_, __) {
                     final search = _controller.text.toLowerCase();
@@ -153,17 +138,15 @@ class _LogarteDashboardScreenState extends State<LogarteDashboardScreen> {
                       ],
                     );
                   },
-                );
-              },
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              widget.instance.clearLogs();
-            },
-            child: const Icon(Icons.delete_outline_rounded),
-          ),
-        ),
+                ),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    widget.instance.clearLogs();
+                  },
+                  child: const Icon(Icons.delete_outline_rounded),
+                ),
+              );
+            }),
       ),
     );
   }
