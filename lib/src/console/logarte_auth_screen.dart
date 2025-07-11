@@ -45,7 +45,12 @@ class _LogarteAuthScreenState extends State<LogarteAuthScreen> {
   Widget build(BuildContext context) {
     return LogarteThemeWrapper(
       child: WillPopScope(
-        onWillPop: () => Future.value(false),
+        onWillPop: () {
+          if (_isLoggedIn || _noPassword) {
+            return Future.value(true);
+          }
+          return Future.value(false);
+        },
         child: _isLoggedIn || _noPassword
             ? LogarteDashboardScreen(
                 widget.instance,
